@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -20,6 +19,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -31,7 +34,7 @@ import com.example.cryptoapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CryptoScreen(
+fun MainScreen(
     isLoading: Boolean,
     isError: Boolean,
     selectedCurrency: String,
@@ -46,7 +49,10 @@ fun CryptoScreen(
             ) {
                 TopAppBar(
                     title = {
-                        Text(stringResource(id = R.string.list_crypto), fontWeight = FontWeight.Medium)
+                        Text(
+                            stringResource(id = R.string.list_crypto),
+                            fontWeight = FontWeight.Medium
+                        )
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -78,7 +84,6 @@ fun CryptoScreen(
     )
 }
 
-// TODO() Доделать chips (не меняется цвет кнопок)
 @Composable
 fun CurrencyChips(
     selectedCurrency: String,
@@ -86,15 +91,15 @@ fun CurrencyChips(
     modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
+        modifier = modifier.padding(horizontal = 15.dp)
     ) {
-        Spacer(modifier = Modifier.width(15.dp))
         listOf("USD", "RUB").forEach { currency ->
             val isSelected = currency == selectedCurrency
             FilterChip(
                 selected = isSelected,
-                onClick = { onCurrencySelected(currency) },
-                label = { Text(currency, modifier = Modifier.padding(horizontal = 10.dp))},
+                onClick = { onCurrencySelected(currency) },  // Обновляем состояние при нажатии
+                label = { Text(currency, modifier = Modifier.padding(horizontal = 10.dp)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = Color(0x41FF9F00), // Цвет выделенного чипа
                     selectedLabelColor = Color(0xFFFFAD25),
@@ -109,27 +114,17 @@ fun CurrencyChips(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewCryptoScreenLoading() {
-    CryptoScreen(
-        isLoading = true,
-        isError = false,
-        selectedCurrency = "RUS",
-        onCurrencySelected = {},
-        onRetry = {}
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewCryptoScreenError() {
-    CryptoScreen(
+    var selectedCurrency by remember { mutableStateOf("USD") }
+    MainScreen(
         isLoading = false,
         isError = true,
-        selectedCurrency = "USD",
-        onCurrencySelected = {},
+        selectedCurrency = selectedCurrency,
+        onCurrencySelected = { newCurrency ->
+            selectedCurrency = newCurrency  // Обновляем состояние выбранной валюты
+        },
         onRetry = {}
     )
 }

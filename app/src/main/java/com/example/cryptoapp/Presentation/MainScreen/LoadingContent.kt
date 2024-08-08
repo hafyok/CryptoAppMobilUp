@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoadingScreen() {
@@ -23,4 +24,16 @@ fun LoadingScreen() {
             color = Color(0xFFFFA500) // Оранжевый цвет индикатора
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewCryptoScreenLoading() {
+    MainScreen(
+        isLoading = true,
+        isError = false,
+        selectedCurrency = "RUS",
+        onCurrencySelected = {},
+        onRetry = {}
+    )
 }
