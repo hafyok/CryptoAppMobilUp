@@ -26,7 +26,7 @@ fun LoadingScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator(
-            color = Orange // Оранжевый цвет индикатора
+            color = Orange
         )
     }
 }
