@@ -1,6 +1,6 @@
-package com.example.cryptoapp.Presentation
+package com.example.cryptoapp.Presentation.MainScreen
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,11 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -23,15 +20,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.cryptoapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,15 +46,13 @@ fun CryptoScreen(
             ) {
                 TopAppBar(
                     title = {
-                        Text("Список криптовалют", fontWeight = FontWeight.Medium)
+                        Text(stringResource(id = R.string.list_crypto), fontWeight = FontWeight.Medium)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
                 CurrencyChips(
                     selectedCurrency = selectedCurrency,
                     onCurrencySelected = onCurrencySelected,
-                    /*modifier = Modifier
-                        .padding(start = 16.dp, bottom = 8.dp) // сдвиг чипов влево и вниз*/
                 )
                 HorizontalDivider(modifier = Modifier.shadow(2.dp))
             }
@@ -75,7 +68,7 @@ fun CryptoScreen(
 
                 when {
                     isLoading -> LoadingScreen()
-                    isError -> ErrorScreen(onRetry = onRetry)
+                    isError -> ErrorContent(onRetry = onRetry)
                     else -> {
                         // Здесь будет основной контент
                     }
@@ -85,6 +78,7 @@ fun CryptoScreen(
     )
 }
 
+// TODO() Доделать chips (не меняется цвет кнопок)
 @Composable
 fun CurrencyChips(
     selectedCurrency: String,
@@ -100,7 +94,7 @@ fun CurrencyChips(
             FilterChip(
                 selected = isSelected,
                 onClick = { onCurrencySelected(currency) },
-                label = { Text(currency, modifier = Modifier.padding(horizontal = 10.dp), color = Color.Black) },
+                label = { Text(currency, modifier = Modifier.padding(horizontal = 10.dp))},
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = Color(0x41FF9F00), // Цвет выделенного чипа
                     selectedLabelColor = Color(0xFFFFAD25),
@@ -108,58 +102,13 @@ fun CurrencyChips(
                     labelColor = Color.Black
                 ),
                 modifier = Modifier.padding(horizontal = 4.dp),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(0.dp, color = Color.White)
             )
         }
     }
 }
 
-
-@Composable
-fun LoadingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator(
-            color = Color(0xFFFFA500) // Оранжевый цвет индикатора
-        )
-    }
-}
-
-@Composable
-fun ErrorScreen(onRetry: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground), // Замените на реальный ресурс
-            contentDescription = null,
-            modifier = Modifier.size(80.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Произошла какая-то ошибка :(",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            color = Color.Gray
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(
-            onClick = onRetry,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "ПОПРОБОВАТЬ")
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -167,7 +116,7 @@ fun PreviewCryptoScreenLoading() {
     CryptoScreen(
         isLoading = true,
         isError = false,
-        selectedCurrency = "USD",
+        selectedCurrency = "RUS",
         onCurrencySelected = {},
         onRetry = {}
     )
