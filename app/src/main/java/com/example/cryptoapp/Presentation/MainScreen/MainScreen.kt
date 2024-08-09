@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -19,10 +21,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -30,17 +31,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.example.cryptoapp.R
+import com.example.cryptoapp.ui.theme.Black
+import com.example.cryptoapp.ui.theme.LightGrey
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    isLoading: Boolean,
-    isError: Boolean,
-    selectedCurrency: String,
-    onCurrencySelected: (String) -> Unit,
-    onRetry: () -> Unit
+    viewModel: MainViewModel,
+    onNavigateToAnotherScreen: () -> Unit // Если нужно перейти на другой экран
 ) {
+    val state by viewModel.state.collectAsState()
+    val cryptoList by viewModel.cryptoList.collectAsState()
     Scaffold(
         topBar = {
             Column(
@@ -57,8 +61,8 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
                 CurrencyChips(
-                    selectedCurrency = selectedCurrency,
-                    onCurrencySelected = onCurrencySelected,
+                    selectedCurrency = state.selectedCurrency,
+                    onCurrencySelected = viewModel::onCurrencySelected,
                 )
                 HorizontalDivider(modifier = Modifier.shadow(2.dp))
             }
@@ -70,13 +74,32 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(it)
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 when {
-                    isLoading -> LoadingScreen()
-                    isError -> ErrorContent(onRetry = onRetry)
+                    state.isLoading -> LoadingScreen()
+                    state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
-                        // Здесь будет основной контент
+                        LazyColumn {
+                            items(cryptoList) { crypto ->
+                                CryptoListItem(
+                                    icon = crypto.image.toString(),
+                                    description = crypto.symbol.toString(),
+                                    title = crypto.name.toString(),
+                                    price = String.format(
+                                        Locale.getDefault(),
+                                        "%.2f",
+                                        crypto.currentPrice
+                                    ),
+                                    percent = String.format(
+                                        Locale.getDefault(),
+                                        "%.2f",
+                                        crypto.priceChangePercentage24h
+                                    ),
+                                    currency = "$"
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -99,12 +122,12 @@ fun CurrencyChips(
             FilterChip(
                 selected = isSelected,
                 onClick = { onCurrencySelected(currency) },  // Обновляем состояние при нажатии
-                label = { Text(currency, modifier = Modifier.padding(horizontal = 10.dp)) },
+                label = { Text(currency, modifier = Modifier.padding(horizontal = 11.dp)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = Color(0x41FF9F00), // Цвет выделенного чипа
                     selectedLabelColor = Color(0xFFFFAD25),
-                    containerColor = Color.LightGray,
-                    labelColor = Color.Black
+                    containerColor = LightGrey,
+                    labelColor = Black
                 ),
                 modifier = Modifier.padding(horizontal = 4.dp),
                 shape = RoundedCornerShape(16.dp),
@@ -117,14 +140,12 @@ fun CurrencyChips(
 @Preview(showBackground = true)
 @Composable
 fun PreviewCryptoScreenError() {
-    var selectedCurrency by remember { mutableStateOf("USD") }
+    val viewModel = remember { MainViewModel() }
+    val navController = rememberNavController()
     MainScreen(
-        isLoading = false,
-        isError = true,
-        selectedCurrency = selectedCurrency,
-        onCurrencySelected = { newCurrency ->
-            selectedCurrency = newCurrency  // Обновляем состояние выбранной валюты
-        },
-        onRetry = {}
+        viewModel = viewModel,
+        onNavigateToAnotherScreen = {
+            navController.navigate("detail_screen")
+        }
     )
 }
