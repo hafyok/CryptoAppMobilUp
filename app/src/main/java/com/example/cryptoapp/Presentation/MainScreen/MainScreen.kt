@@ -82,7 +82,7 @@ fun MainScreen(
                             items(cryptoList){
                                 crypto ->
                                 CryptoListItem(
-                                    id_icon = R.drawable.ic_bnb,
+                                    icon = crypto.image.toString(),
                                     description = crypto.symbol.toString(),
                                     title = crypto.name.toString(),
                                     price = crypto.currentPrice.toString(),
