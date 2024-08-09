@@ -28,7 +28,7 @@ class MainViewModel : ViewModel() {
 
     fun retry() {
         // Логика повтора загрузки данных
-        //getCrypto(_state.value.selectedCurrency)
+        getCrypto()
     }
 
     private fun getCrypto() {

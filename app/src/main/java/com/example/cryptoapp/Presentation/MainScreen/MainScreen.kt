@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -73,10 +75,22 @@ fun MainScreen(
 
                 when {
                     state.isLoading -> LoadingScreen()
-                    state.isError -> ErrorContent(onRetry = { })
+                    state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
                         // Текст пока только для теста
-                        Text(text = cryptoList[9].name.toString())
+                        LazyColumn {
+                            items(cryptoList){
+                                crypto ->
+                                CryptoListItem(
+                                    id_icon = R.drawable.ic_bnb,
+                                    description = crypto.symbol.toString(),
+                                    title = crypto.name.toString(),
+                                    price = crypto.currentPrice.toString(),
+                                    percent = crypto.priceChangePercentage24h.toString(),
+                                    currency = "$"
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -122,7 +136,6 @@ fun PreviewCryptoScreenError() {
     MainScreen(
         viewModel = viewModel,
         onNavigateToAnotherScreen = {
-            // Пример навигации на другой экран
             navController.navigate("detail_screen")
         }
     )

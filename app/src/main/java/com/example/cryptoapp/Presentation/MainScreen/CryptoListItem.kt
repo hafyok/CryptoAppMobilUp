@@ -12,9 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.cryptoapp.R
 import com.example.cryptoapp.ui.theme.DarkGrey
 import com.example.cryptoapp.ui.theme.LightGrey
 
@@ -23,8 +21,8 @@ fun CryptoListItem(
     id_icon: Int,
     description: String,
     title: String,
-    price: Double,
-    percent: Double,
+    price: String,
+    percent: String,
     currency: String,
     //TODO() После подключения API добавить знаки
 ) {
@@ -69,6 +67,7 @@ fun CryptoListItem(
     }
 }
 
+/*
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewCryptoListItem() {
@@ -100,3 +99,4 @@ fun PreviewCryptoListItem() {
     }
 
 }
+*/
