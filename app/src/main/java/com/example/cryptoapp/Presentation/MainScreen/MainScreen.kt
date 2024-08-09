@@ -33,6 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.cryptoapp.R
+import com.example.cryptoapp.ui.theme.Black
+import com.example.cryptoapp.ui.theme.LightGrey
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,22 +74,28 @@ fun MainScreen(
                     .fillMaxSize()
                     .padding(it)
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 when {
                     state.isLoading -> LoadingScreen()
                     state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
-                        // Текст пока только для теста
                         LazyColumn {
-                            items(cryptoList){
-                                crypto ->
+                            items(cryptoList) { crypto ->
                                 CryptoListItem(
                                     icon = crypto.image.toString(),
                                     description = crypto.symbol.toString(),
                                     title = crypto.name.toString(),
-                                    price = crypto.currentPrice.toString(),
-                                    percent = crypto.priceChangePercentage24h.toString(),
+                                    price = String.format(
+                                        Locale.getDefault(),
+                                        "%.2f",
+                                        crypto.currentPrice
+                                    ),
+                                    percent = String.format(
+                                        Locale.getDefault(),
+                                        "%.2f",
+                                        crypto.priceChangePercentage24h
+                                    ),
                                     currency = "$"
                                 )
                             }
@@ -113,12 +122,12 @@ fun CurrencyChips(
             FilterChip(
                 selected = isSelected,
                 onClick = { onCurrencySelected(currency) },  // Обновляем состояние при нажатии
-                label = { Text(currency, modifier = Modifier.padding(horizontal = 10.dp)) },
+                label = { Text(currency, modifier = Modifier.padding(horizontal = 11.dp)) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = Color(0x41FF9F00), // Цвет выделенного чипа
                     selectedLabelColor = Color(0xFFFFAD25),
-                    containerColor = Color.LightGray,
-                    labelColor = Color.Black
+                    containerColor = LightGrey,
+                    labelColor = Black
                 ),
                 modifier = Modifier.padding(horizontal = 4.dp),
                 shape = RoundedCornerShape(16.dp),
