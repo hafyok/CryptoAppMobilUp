@@ -19,10 +19,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -30,17 +29,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.example.cryptoapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    isLoading: Boolean,
-    isError: Boolean,
-    selectedCurrency: String,
-    onCurrencySelected: (String) -> Unit,
-    onRetry: () -> Unit
+    viewModel: MainViewModel,
+    onNavigateToAnotherScreen: () -> Unit // Если нужно перейти на другой экран
 ) {
+    val state by viewModel.state.collectAsState()
+    val cryptoList by viewModel.cryptoList.collectAsState()
     Scaffold(
         topBar = {
             Column(
@@ -57,8 +56,8 @@ fun MainScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
                 CurrencyChips(
-                    selectedCurrency = selectedCurrency,
-                    onCurrencySelected = onCurrencySelected,
+                    selectedCurrency = state.selectedCurrency,
+                    onCurrencySelected = viewModel::onCurrencySelected,
                 )
                 HorizontalDivider(modifier = Modifier.shadow(2.dp))
             }
@@ -73,10 +72,11 @@ fun MainScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 when {
-                    isLoading -> LoadingScreen()
-                    isError -> ErrorContent(onRetry = onRetry)
+                    state.isLoading -> LoadingScreen()
+                    state.isError -> ErrorContent(onRetry = { })
                     else -> {
                         // Здесь будет основной контент
+                        Text(text = cryptoList[3].name.toString())
                     }
                 }
             }
@@ -117,14 +117,13 @@ fun CurrencyChips(
 @Preview(showBackground = true)
 @Composable
 fun PreviewCryptoScreenError() {
-    var selectedCurrency by remember { mutableStateOf("USD") }
+    val viewModel = remember { MainViewModel() }
+    val navController = rememberNavController()
     MainScreen(
-        isLoading = false,
-        isError = true,
-        selectedCurrency = selectedCurrency,
-        onCurrencySelected = { newCurrency ->
-            selectedCurrency = newCurrency  // Обновляем состояние выбранной валюты
-        },
-        onRetry = {}
+        viewModel = viewModel,
+        onNavigateToAnotherScreen = {
+            // Пример навигации на другой экран
+            navController.navigate("detail_screen")
+        }
     )
 }
