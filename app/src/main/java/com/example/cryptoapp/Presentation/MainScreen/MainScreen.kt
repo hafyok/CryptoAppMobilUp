@@ -75,8 +75,8 @@ fun MainScreen(
                     state.isLoading -> LoadingScreen()
                     state.isError -> ErrorContent(onRetry = { })
                     else -> {
-                        // Здесь будет основной контент
-                        Text(text = cryptoList[3].name.toString())
+                        // Текст пока только для теста
+                        Text(text = cryptoList[9].name.toString())
                     }
                 }
             }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
     private val _state = MutableStateFlow(MainScreenState())
     val state: StateFlow<MainScreenState> = _state
 
@@ -19,30 +19,29 @@ class MainViewModel: ViewModel() {
 
     fun onCurrencySelected(currency: String) {
         _state.value = _state.value.copy(selectedCurrency = currency)
-    }
-
-    fun retry() {
-        // Логика повтора загрузки данных
+        getCrypto()  // Обновляем данные для выбранной валюты
     }
 
     init {
         getCrypto()
     }
 
-    fun getCrypto(){
+    fun retry() {
+        // Логика повтора загрузки данных
+        //getCrypto(_state.value.selectedCurrency)
+    }
+
+    private fun getCrypto() {
+        _state.value = _state.value.copy(isLoading = true, isError = false)  // Запускаем загрузку
         val cryptoApi = RetrofitClient.getInstance().create(CoinGeckoApi::class.java)
         viewModelScope.launch {
             try {
                 val response = cryptoApi.getCryptoCurrencies("usd")
-                Log.d("CRYPTO", response.toString())
                 _cryptoList.value = response
-                _state.value.isError = false
-                _state.value.isLoading = false
-
+                _state.value = _state.value.copy(isLoading = false, isError = false)
             } catch (e: Exception) {
                 Log.e("NOT_CRYPTO", e.toString())
-                _state.value.isLoading = false
-                _state.value.isError = true
+                _state.value = _state.value.copy(isLoading = false, isError = true)
             }
         }
     }
