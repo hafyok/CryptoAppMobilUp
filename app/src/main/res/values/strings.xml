@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CryptoApp</string>
+
+    <string name="list_crypto">Список криптовалют</string>
+    <string name="some_error">Произошла какая-то ошибка :( \n Попробуем снова?</string>
+    <string name="try_again">ПОПРОБОВАТЬ</string>
+
 </resources>
