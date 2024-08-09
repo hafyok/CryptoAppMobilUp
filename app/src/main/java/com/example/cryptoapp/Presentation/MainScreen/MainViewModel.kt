@@ -17,26 +17,36 @@ class MainViewModel : ViewModel() {
     private val _cryptoList = MutableStateFlow(listOf<CryptoCurrency>())
     val cryptoList: StateFlow<List<CryptoCurrency>> = _cryptoList
 
-    fun onCurrencySelected(currency: String) {
-        _state.value = _state.value.copy(selectedCurrency = currency)
-        getCrypto()
-    }
+    private val _currentCurrency = MutableStateFlow(_state.value.selectedCurrency.lowercase())
+    val currentCurrency: StateFlow<String> = _currentCurrency
+
+    private val _iconCurrency = MutableStateFlow(if (_currentCurrency.value == "usd") "$" else "Р")
+    val iconCurrency: StateFlow<String> = _iconCurrency
 
     init {
-        getCrypto()
+        getCrypto(currentCurrency.value)
+    }
+
+    fun onCurrencySelected(currency: String) {
+        _state.value = _state.value.copy(selectedCurrency = currency)
+        _currentCurrency.value = _state.value.selectedCurrency.lowercase()
+        _iconCurrency.value = if (_currentCurrency.value == "usd") "$" else "Р"
+
+        Log.d("CurrencySelected", _currentCurrency.value)
+        getCrypto(currentCurrency.value)
     }
 
     fun retry() {
         // Логика повтора загрузки данных
-        getCrypto()
+        getCrypto(currentCurrency.value)
     }
 
-    private fun getCrypto() {
+    private fun getCrypto(currency: String) {
         _state.value = _state.value.copy(isLoading = true, isError = false)  // Запускаем загрузку
         val cryptoApi = RetrofitClient.getInstance().create(CoinGeckoApi::class.java)
         viewModelScope.launch {
             try {
-                val response = cryptoApi.getCryptoCurrencies("usd")
+                val response = cryptoApi.getCryptoCurrencies(currency)
                 _cryptoList.value = response
                 _state.value = _state.value.copy(isLoading = false, isError = false)
             } catch (e: Exception) {

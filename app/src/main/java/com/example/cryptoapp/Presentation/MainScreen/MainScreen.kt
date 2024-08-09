@@ -45,6 +45,8 @@ fun MainScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val cryptoList by viewModel.cryptoList.collectAsState()
+    val iconCurrency by viewModel.iconCurrency.collectAsState()
+
     Scaffold(
         topBar = {
             Column(
@@ -96,7 +98,7 @@ fun MainScreen(
                                         "%.2f",
                                         crypto.priceChangePercentage24h
                                     ),
-                                    currency = "$"
+                                    currency = iconCurrency
                                 )
                             }
                         }
