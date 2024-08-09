@@ -19,7 +19,7 @@ class MainViewModel : ViewModel() {
 
     fun onCurrencySelected(currency: String) {
         _state.value = _state.value.copy(selectedCurrency = currency)
-        getCrypto()  // Обновляем данные для выбранной валюты
+        getCrypto()
     }
 
     init {
