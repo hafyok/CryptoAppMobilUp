@@ -54,7 +54,7 @@ fun DetailScreen(
                         IconButton(onClick = navigateBack) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Localized description",
+                                contentDescription = "Back button",
                                 tint = Grey
                             )
                         }
