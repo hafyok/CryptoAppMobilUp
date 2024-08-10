@@ -29,12 +29,13 @@ fun CryptoListItem(
     price: String,
     percent: String,
     currency: String,
-    onClick: () -> Unit
+    id: String, // Добавьте параметр id валюты
+    onClick: (String) -> Unit // Функция, принимающая id
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable { onClick(id) }, // Передаем id при нажатии
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {

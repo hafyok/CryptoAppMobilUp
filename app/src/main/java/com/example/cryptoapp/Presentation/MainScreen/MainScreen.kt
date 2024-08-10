@@ -43,7 +43,7 @@ import java.util.Locale
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    onNavigateToAnotherScreen: () -> Unit // Если нужно перейти на другой экран
+    onNavigateToAnotherScreen: (String) -> Unit // Теперь функция принимает id валюты
 ) {
     val state by viewModel.state.collectAsState()
     val cryptoList by viewModel.cryptoList.collectAsState()
@@ -102,7 +102,8 @@ fun MainScreen(
                                         crypto.priceChangePercentage24h
                                     ),
                                     currency = iconCurrency,
-                                    onNavigateToAnotherScreen
+                                    id = crypto.id.toString(), // Передаем id валюты
+                                    onClick = { cryptoId -> onNavigateToAnotherScreen(cryptoId) } // Передаем id при нажатии
                                 )
                             }
                         }

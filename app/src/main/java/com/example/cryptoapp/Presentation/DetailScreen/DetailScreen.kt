@@ -17,6 +17,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -35,8 +37,11 @@ fun DetailScreen(
     title: String,
     onRetry: () -> Unit,
     navigateBack: () -> Unit,
+    viewModel: DetailViewModel
 ) {
-    val viewModel = DetailViewModel()
+    val coinDetail by viewModel.coinDetail.collectAsState()
+    val state by viewModel.state.collectAsState()
+
     Scaffold(
         topBar = {
             Column(
@@ -76,12 +81,12 @@ fun DetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 when {
-                    isLoading -> LoadingScreen()
-                    isError -> ErrorContent(onRetry = onRetry)
+                    state.isLoading -> LoadingScreen()
+                    //state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
                         // Здесь будет основной контент
                         DetailCrypto(
-                            image = "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+                            image = coinDetail.image?.large.toString(),
                             describeText = "Bitcoin is a decentralized cryptocurrency originally described in a 2008 whitepaper by a person, or group of people, using the alias Satoshi Nakamoto. It was launched soon after, in January 2009.\n" +
                                     "\n" +
                                     "Bitcoin is a peer-to-peer online currency, meaning that all transactions happen directly between equal, independent network participants, without the need for any intermediary to permit or facilitate them. Bitcoin was created, according to Nakamoto’s own words, to allow “online payments to be sent directly from one party to another without going through a financial institution.”\n" +
@@ -96,8 +101,9 @@ fun DetailScreen(
 }
 
 
+/*
 @Composable
 @Preview
 fun PreviewDetailScreen() {
     DetailScreen(isLoading = false, isError = true, "Bitcoin", onRetry = {}, navigateBack = {})
-}
+}*/
