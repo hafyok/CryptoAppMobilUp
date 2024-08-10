@@ -32,6 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.example.cryptoapp.Presentation.ErrorContent
+import com.example.cryptoapp.Presentation.LoadingScreen
 import com.example.cryptoapp.R
 import com.example.cryptoapp.ui.theme.Black
 import com.example.cryptoapp.ui.theme.LightGrey
@@ -79,7 +81,8 @@ fun MainScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 when {
-                    state.isLoading -> LoadingScreen()
+                    state.isLoading ->
+                        LoadingScreen()
                     state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
                         LazyColumn {
