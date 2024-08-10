@@ -29,9 +29,11 @@ fun AppNavigation() {
                 isLoading = false,
                 isError = false,
                 title = "Bitcoin",
-                onRetry = { /*TODO*/ }) {
-
-            }
+                onRetry = { /*TODO*/ },
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
