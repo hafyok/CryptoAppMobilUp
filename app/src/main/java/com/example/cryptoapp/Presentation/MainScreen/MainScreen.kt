@@ -101,7 +101,8 @@ fun MainScreen(
                                         "%.2f",
                                         crypto.priceChangePercentage24h
                                     ),
-                                    currency = iconCurrency
+                                    currency = iconCurrency,
+                                    onNavigateToAnotherScreen
                                 )
                             }
                         }

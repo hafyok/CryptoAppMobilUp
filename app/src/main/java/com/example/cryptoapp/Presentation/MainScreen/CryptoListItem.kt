@@ -1,5 +1,6 @@
 package com.example.cryptoapp.Presentation.MainScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,9 +29,12 @@ fun CryptoListItem(
     price: String,
     percent: String,
     currency: String,
+    onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
@@ -70,28 +74,5 @@ fun CryptoListItem(
                 modifier = Modifier.padding(vertical = 8.dp)
             )
         }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewCryptoListItem() {
-    Column {
-        CryptoListItem(
-            icon = "https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661",
-            description = "btc",
-            title = "Bitcoin",
-            price = String.format(Locale.getDefault(),"%.2f", 57839.438732985743),
-            percent = "-4.05",
-            currency = "$"
-        )
-        CryptoListItem(
-            icon = "https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661",
-            description = "btc",
-            title = "Bitcoin",
-            price = String.format(Locale.getDefault(),"%.2f", 57839.438732985743),
-            percent = "4.05",
-            currency = "$"
-        )
     }
 }

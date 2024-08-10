@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cryptoapp.Presentation.DetailScreen.DetailScreen
 import com.example.cryptoapp.Presentation.MainScreen.MainScreen
 import com.example.cryptoapp.Presentation.MainScreen.MainViewModel
 
@@ -24,6 +25,13 @@ fun AppNavigation() {
 
         composable("detail_screen") {
             // Экран с дополнительной информацией
+            DetailScreen(
+                isLoading = false,
+                isError = false,
+                title = "Bitcoin",
+                onRetry = { /*TODO*/ }) {
+
+            }
         }
     }
 }

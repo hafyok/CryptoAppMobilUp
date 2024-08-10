@@ -1,7 +1,6 @@
 package com.example.cryptoapp.Presentation.DetailScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -19,7 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -29,8 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.example.cryptoapp.Presentation.ErrorContent
 import com.example.cryptoapp.Presentation.LoadingScreen
 import com.example.cryptoapp.ui.theme.Grey
-import com.example.cryptoapp.ui.theme.LightGrey
-import com.example.cryptoapp.ui.theme.Orange
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +41,7 @@ fun DetailScreen(
             Column(
                 modifier = Modifier
                     .background(Color.White)
-                    //.shadow(4.dp)
+                //.shadow(4.dp)
             ) {
                 TopAppBar(
                     title = {
@@ -84,13 +79,20 @@ fun DetailScreen(
                     isError -> ErrorContent(onRetry = onRetry)
                     else -> {
                         // Здесь будет основной контент
+                        DetailCrypto(
+                            image = "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+                            describeText = "Bitcoin is a decentralized cryptocurrency originally described in a 2008 whitepaper by a person, or group of people, using the alias Satoshi Nakamoto. It was launched soon after, in January 2009.\n" +
+                                    "\n" +
+                                    "Bitcoin is a peer-to-peer online currency, meaning that all transactions happen directly between equal, independent network participants, without the need for any intermediary to permit or facilitate them. Bitcoin was created, according to Nakamoto’s own words, to allow “online payments to be sent directly from one party to another without going through a financial institution.”\n" +
+                                    "Bitcoin is a peer-to-peer online currency, meaning that all transactions happen directly between equal, independent network participants, without the need for any intermediary to permit or facilitate them. Bitcoin was created, according to Nakamoto’s own words, to allow “online payments to be sent directly from one party to another without going through a financial institution.”",
+                            categories = "Smart Contract Platform, Ethereum Ecosystems"
+                        )
                     }
                 }
             }
         }
     )
 }
-
 
 
 @Composable
