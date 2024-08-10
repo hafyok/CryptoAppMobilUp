@@ -82,7 +82,7 @@ fun DetailScreen(
                             image = coinDetail.image?.large.toString(),
                             describeText = coinDetail.description?.cleanedDescription
                                 ?: "No description available",
-                            categories = coinDetail.categories.toString()
+                            categories = coinDetail.categories.joinToString(", ")
                         )
                     }
                 }
