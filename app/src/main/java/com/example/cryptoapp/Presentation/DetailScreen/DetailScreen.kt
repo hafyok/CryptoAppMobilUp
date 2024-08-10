@@ -36,6 +36,7 @@ fun DetailScreen(
     onRetry: () -> Unit,
     navigateBack: () -> Unit,
 ) {
+    val viewModel = DetailViewModel()
     Scaffold(
         topBar = {
             Column(
