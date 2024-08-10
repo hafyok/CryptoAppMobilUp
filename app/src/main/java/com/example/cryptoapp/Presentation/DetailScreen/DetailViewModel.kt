@@ -6,12 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.cryptoapp.Api.CoinGeckoApi
 import com.example.cryptoapp.Api.CryptoDetails
 import com.example.cryptoapp.Api.RetrofitClient
-import com.example.cryptoapp.Presentation.MainScreen.MainScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val cryptoId: String): ViewModel() {
+class DetailViewModel(private val cryptoId: String) : ViewModel() {
     private val _state = MutableStateFlow(DetailScreenState())
     val state: StateFlow<DetailScreenState> = _state
 
@@ -22,7 +21,11 @@ class DetailViewModel(private val cryptoId: String): ViewModel() {
         getCryptoDetails(cryptoId)
     }
 
-    fun getCryptoDetails(crypto: String){
+    fun retry() {
+        getCryptoDetails(cryptoId)
+    }
+
+    private fun getCryptoDetails(crypto: String) {
         val cryptoApi = RetrofitClient.getInstance().create(CoinGeckoApi::class.java)
         viewModelScope.launch {
             try {

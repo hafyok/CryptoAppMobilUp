@@ -13,7 +13,11 @@ data class CryptoDetails(
 
 data class Description (
     @SerializedName("en"    ) var en    : String? = null,
-)
+){
+    // Для редактирования строки при запросе к ней
+    val cleanedDescription: String?
+        get() = en?.replace("Description(en=", "")?.replace(")", "")
+}
 
 data class Image (
     @SerializedName("thumb" ) var thumb : String? = null,

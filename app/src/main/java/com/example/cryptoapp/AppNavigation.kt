@@ -31,16 +31,10 @@ fun AppNavigation() {
             val viewModel: DetailViewModel = viewModel(
                 factory = DetailViewModelFactory(cryptoId)
             )
-            viewModel.coinDetail.value.name?.let {
-                DetailScreen(
-                    isLoading = viewModel.state.value.isLoading,
-                    isError = viewModel.state.value.isError,
-                    title = it,
-                    onRetry = { viewModel.getCryptoDetails(cryptoId) },
-                    navigateBack = { navController.popBackStack() },
-                    viewModel = viewModel
-                )
-            }
+            DetailScreen(
+                navigateBack = { navController.popBackStack() },
+                viewModel = viewModel
+            )
         }
     }
 }
