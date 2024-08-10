@@ -2,9 +2,13 @@ package com.example.cryptoapp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cryptoapp.Presentation.DetailScreen.DetailScreen
+import com.example.cryptoapp.Presentation.DetailScreen.DetailViewModel
+import com.example.cryptoapp.Presentation.DetailScreen.DetailViewModelFactory
 import com.example.cryptoapp.Presentation.MainScreen.MainScreen
 import com.example.cryptoapp.Presentation.MainScreen.MainViewModel
 
@@ -16,14 +20,21 @@ fun AppNavigation() {
             val viewModel = remember { MainViewModel() }
             MainScreen(
                 viewModel = viewModel,
-                onNavigateToAnotherScreen = {
-                    navController.navigate("detail_screen")
+                onNavigateToAnotherScreen = { cryptoId ->
+                    navController.navigate("detail_screen/$cryptoId") // Передаем id валюты в маршрут
                 }
             )
         }
 
-        composable("detail_screen") {
-            // Экран с дополнительной информацией
+        composable("detail_screen/{cryptoId}") { backStackEntry ->
+            val cryptoId = backStackEntry.arguments?.getString("cryptoId") ?: return@composable
+            val viewModel: DetailViewModel = viewModel(
+                factory = DetailViewModelFactory(cryptoId)
+            )
+            DetailScreen(
+                navigateBack = { navController.popBackStack() },
+                viewModel = viewModel
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cryptoapp.Presentation.MainScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.cryptoapp.ui.theme.DarkGrey
+import com.example.cryptoapp.ui.theme.Grey
 import com.example.cryptoapp.ui.theme.LightGrey
 import com.example.cryptoapp.ui.theme.LightRed
 import java.util.Locale
@@ -29,15 +29,13 @@ fun CryptoListItem(
     price: String,
     percent: String,
     currency: String,
+    id: String, // Добавьте параметр id валюты
+    onClick: (String) -> Unit // Функция, принимающая id
 ) {
-    var textColor = remember {
-        mutableStateOf(LightGrey)
-    }
-    var sign = remember {
-        mutableStateOf("+")
-    }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick(id) }, // Передаем id при нажатии
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
@@ -73,32 +71,9 @@ fun CryptoListItem(
             Text(
                 text = if (percent.startsWith("-")) "- ${percent.removePrefix("-")}%"
                 else "+ $percent%", //эти махинации нужны, чтобы между минусом и цифрами был пробел
-                color = if (percent.startsWith("-")) LightRed else textColor.value,
+                color = if (percent.startsWith("-")) LightRed else Grey,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
         }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewCryptoListItem() {
-    Column {
-        CryptoListItem(
-            icon = "https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661",
-            description = "btc",
-            title = "Bitcoin",
-            price = String.format(Locale.getDefault(),"%.2f", 57839.438732985743),
-            percent = "-4.05",
-            currency = "$"
-        )
-        CryptoListItem(
-            icon = "https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661",
-            description = "btc",
-            title = "Bitcoin",
-            price = String.format(Locale.getDefault(),"%.2f", 57839.438732985743),
-            percent = "4.05",
-            currency = "$"
-        )
     }
 }

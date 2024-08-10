@@ -32,6 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.example.cryptoapp.Presentation.ErrorContent
+import com.example.cryptoapp.Presentation.LoadingScreen
 import com.example.cryptoapp.R
 import com.example.cryptoapp.ui.theme.Black
 import com.example.cryptoapp.ui.theme.LightGrey
@@ -41,10 +43,12 @@ import java.util.Locale
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    onNavigateToAnotherScreen: () -> Unit // Если нужно перейти на другой экран
+    onNavigateToAnotherScreen: (String) -> Unit // Теперь функция принимает id валюты
 ) {
     val state by viewModel.state.collectAsState()
     val cryptoList by viewModel.cryptoList.collectAsState()
+    val iconCurrency by viewModel.iconCurrency.collectAsState()
+
     Scaffold(
         topBar = {
             Column(
@@ -77,7 +81,8 @@ fun MainScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 when {
-                    state.isLoading -> LoadingScreen()
+                    state.isLoading ->
+                        LoadingScreen()
                     state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
                         LazyColumn {
@@ -96,7 +101,9 @@ fun MainScreen(
                                         "%.2f",
                                         crypto.priceChangePercentage24h
                                     ),
-                                    currency = "$"
+                                    currency = iconCurrency,
+                                    id = crypto.id.toString(), // Передаем id валюты
+                                    onClick = { cryptoId -> onNavigateToAnotherScreen(cryptoId) } // Передаем id при нажатии
                                 )
                             }
                         }

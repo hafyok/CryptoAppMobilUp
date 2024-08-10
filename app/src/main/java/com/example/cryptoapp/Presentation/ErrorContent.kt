@@ -1,4 +1,4 @@
-package com.example.cryptoapp.Presentation.MainScreen
+package com.example.cryptoapp.Presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
