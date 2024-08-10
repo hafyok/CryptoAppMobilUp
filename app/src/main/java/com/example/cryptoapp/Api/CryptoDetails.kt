@@ -3,9 +3,9 @@ package com.example.cryptoapp.Api
 import com.google.gson.annotations.SerializedName
 
 data class CryptoDetails(
-    @SerializedName("id"                    ) var id                 : String?           = null,
-    @SerializedName("name"                  ) var name               : String?           = null,
-    @SerializedName("web_slug"              ) var webSlug            : String?           = null,
+    @SerializedName("id"                    ) var id                 : String?           = "",
+    @SerializedName("name"                  ) var name               : String?           = "",
+    @SerializedName("web_slug"              ) var webSlug            : String?           = "",
     @SerializedName("categories"            ) var categories         : ArrayList<String> = arrayListOf(),
     @SerializedName("description"           ) var description        : Description?      = Description(),
     @SerializedName("image"                 ) var image              : Image?            = Image()

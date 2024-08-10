@@ -20,6 +20,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,7 +37,10 @@ import com.example.cryptoapp.Presentation.ErrorContent
 import com.example.cryptoapp.Presentation.LoadingScreen
 import com.example.cryptoapp.R
 import com.example.cryptoapp.ui.theme.Black
+import com.example.cryptoapp.ui.theme.DarkOrange
 import com.example.cryptoapp.ui.theme.LightGrey
+import com.example.cryptoapp.ui.theme.LightOrange
+import com.example.cryptoapp.ui.theme.White
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +66,7 @@ fun MainScreen(
                             fontWeight = FontWeight.Medium
                         )
                     },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = White),
                     modifier = Modifier.fillMaxWidth()
                 )
                 CurrencyChips(
@@ -128,11 +133,11 @@ fun CurrencyChips(
             val isSelected = currency == selectedCurrency
             FilterChip(
                 selected = isSelected,
-                onClick = { onCurrencySelected(currency) },  // Обновляем состояние при нажатии
-                label = { Text(currency, modifier = Modifier.padding(horizontal = 11.dp)) },
+                onClick = { onCurrencySelected(currency) },
+                label = { Text(currency, modifier = Modifier.padding(horizontal = 15.dp)) },
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = Color(0x41FF9F00), // Цвет выделенного чипа
-                    selectedLabelColor = Color(0xFFFFAD25),
+                    selectedContainerColor = DarkOrange, // Цвет выделенного чипа
+                    selectedLabelColor = LightOrange,
                     containerColor = LightGrey,
                     labelColor = Black
                 ),
