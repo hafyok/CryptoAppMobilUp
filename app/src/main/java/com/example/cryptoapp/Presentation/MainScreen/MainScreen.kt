@@ -41,6 +41,8 @@ import com.example.cryptoapp.ui.theme.DarkOrange
 import com.example.cryptoapp.ui.theme.LightGrey
 import com.example.cryptoapp.ui.theme.LightOrange
 import com.example.cryptoapp.ui.theme.White
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +55,7 @@ fun MainScreen(
     val cryptoList by viewModel.cryptoList.collectAsState()
     val iconCurrency by viewModel.iconCurrency.collectAsState()
 
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = true)
     Scaffold(
         topBar = {
             Column(
@@ -88,28 +91,31 @@ fun MainScreen(
                 when {
                     state.isLoading ->
                         LoadingScreen()
+
                     state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
-                        LazyColumn {
-                            items(cryptoList) { crypto ->
-                                CryptoListItem(
-                                    icon = crypto.image.toString(),
-                                    description = crypto.symbol.toString(),
-                                    title = crypto.name.toString(),
-                                    price = String.format(
-                                        Locale.getDefault(),
-                                        "%.2f",
-                                        crypto.currentPrice
-                                    ),
-                                    percent = String.format(
-                                        Locale.getDefault(),
-                                        "%.2f",
-                                        crypto.priceChangePercentage24h
-                                    ),
-                                    currency = iconCurrency,
-                                    id = crypto.id.toString(), // Передаем id валюты
-                                    onClick = { cryptoId -> onNavigateToAnotherScreen(cryptoId) } // Передаем id при нажатии
-                                )
+                        SwipeRefresh(state = swipeRefreshState, onRefresh = { /*TODO*/ }) {
+                            LazyColumn {
+                                items(cryptoList) { crypto ->
+                                    CryptoListItem(
+                                        icon = crypto.image.toString(),
+                                        description = crypto.symbol.toString(),
+                                        title = crypto.name.toString(),
+                                        price = String.format(
+                                            Locale.getDefault(),
+                                            "%.2f",
+                                            crypto.currentPrice
+                                        ),
+                                        percent = String.format(
+                                            Locale.getDefault(),
+                                            "%.2f",
+                                            crypto.priceChangePercentage24h
+                                        ),
+                                        currency = iconCurrency,
+                                        id = crypto.id.toString(), // Передаем id валюты
+                                        onClick = { cryptoId -> onNavigateToAnotherScreen(cryptoId) } // Передаем id при нажатии
+                                    )
+                                }
                             }
                         }
                     }
