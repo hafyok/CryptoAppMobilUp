@@ -55,7 +55,7 @@ fun MainScreen(
     val cryptoList by viewModel.cryptoList.collectAsState()
     val iconCurrency by viewModel.iconCurrency.collectAsState()
 
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = true)
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isLoading)
     Scaffold(
         topBar = {
             Column(
@@ -94,7 +94,7 @@ fun MainScreen(
 
                     state.isError -> ErrorContent(onRetry = { viewModel.retry() })
                     else -> {
-                        SwipeRefresh(state = swipeRefreshState, onRefresh = { /*TODO*/ }) {
+                        SwipeRefresh(state = swipeRefreshState, onRefresh = { viewModel.retry() }) {
                             LazyColumn {
                                 items(cryptoList) { crypto ->
                                     CryptoListItem(

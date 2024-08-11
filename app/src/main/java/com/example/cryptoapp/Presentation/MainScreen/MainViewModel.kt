@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.cryptoapp.Api.CoinGeckoApi
 import com.example.cryptoapp.Api.CryptoCurrency
 import com.example.cryptoapp.Api.RetrofitClient
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
 
 class MainViewModel : ViewModel() {
     private val _state = MutableStateFlow(MainScreenState())
@@ -46,6 +48,7 @@ class MainViewModel : ViewModel() {
         val cryptoApi = RetrofitClient.getInstance().create(CoinGeckoApi::class.java)
         viewModelScope.launch {
             try {
+                delay(1000L)
                 val response = cryptoApi.getCryptoCurrencies(currency)
                 _cryptoList.value = response
                 _state.value = _state.value.copy(isLoading = false, isError = false)
