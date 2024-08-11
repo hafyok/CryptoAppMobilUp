@@ -77,4 +77,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx.v231)
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation("io.coil-kt:coil-compose:2.7.0")}
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.accompanist.swiperefresh.v0270)
+}
