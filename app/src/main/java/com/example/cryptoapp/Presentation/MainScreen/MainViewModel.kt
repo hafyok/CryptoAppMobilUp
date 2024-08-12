@@ -25,6 +25,10 @@ class MainViewModel : ViewModel() {
     private val _iconCurrency = MutableStateFlow(if (_currentCurrency.value == "usd") "$" else "Р")
     val iconCurrency: StateFlow<String> = _iconCurrency
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
+
     init {
         getCrypto(currentCurrency.value)
     }
@@ -39,12 +43,12 @@ class MainViewModel : ViewModel() {
     }
 
     fun retry() {
-        // Логика повтора загрузки данных
+        _isRefreshing.value = true
         getCrypto(currentCurrency.value)
     }
 
     private fun getCrypto(currency: String) {
-        _state.value = _state.value.copy(isLoading = true, isError = false)  // Запускаем загрузку
+        _state.value = _state.value.copy(isLoading = true, isError = false)
         val cryptoApi = RetrofitClient.getInstance().create(CoinGeckoApi::class.java)
         viewModelScope.launch {
             try {
@@ -55,6 +59,8 @@ class MainViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("NOT_CRYPTO", e.toString())
                 _state.value = _state.value.copy(isLoading = false, isError = true)
+            } finally {
+                _isRefreshing.value = false
             }
         }
     }
